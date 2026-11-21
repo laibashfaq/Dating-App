@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Secrets and environment files (NEVER upload these)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p8
+*.p12
+*.jks
+*.mobileprovision
+
+# Expo and build output
+.expo/
+dist/
+build/
+web-build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Operating system files
+.DS_Store
+Thumbs.db
