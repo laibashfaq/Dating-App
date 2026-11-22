@@ -1,63 +1,38 @@
-import { useState } from 'react';
-import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
+import { BrandMark } from '@/components/BrandMark';
 import { AppText } from '@/components/ui/AppText';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
+import { brand } from '@/config/brand';
 import { useTheme } from '@/design/useTheme';
 
-export default function HomeScreen() {
+export default function SplashScreen() {
+  const router = useRouter();
   const { colors, spacing } = useTheme();
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
 
-  const emailError =
-    email.length > 0 && !email.includes('@')
-      ? 'Please enter a valid email address.'
-      : undefined;
-
-  const fakeLoad = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1500);
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => router.replace('/welcome'), 1500);
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ padding: spacing.xl, gap: spacing.lg }}
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.background,
+      }}
+    >
+      <Animated.View
+        entering={FadeIn.duration(700)}
+        style={{ alignItems: 'center', gap: spacing.lg }}
       >
-        <AppText variant="display">Dating App</AppText>
-        <AppText color="textSecondary">
-          Design system preview. This screen is temporary.
-        </AppText>
-
-        <Card style={{ gap: spacing.lg }}>
-          <AppText variant="heading">Sign in</AppText>
-          <Input
-            label="Email"
-            placeholder="you@example.com"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            error={emailError}
-            hint="We will send you a verification code."
-          />
-          <Button label="Continue" onPress={fakeLoad} loading={loading} />
-        </Card>
-
-        <Button label="Secondary button" variant="secondary" onPress={() => {}} />
-        <Button label="Ghost button" variant="ghost" onPress={() => {}} />
-        <Button label="Disabled button" disabled onPress={() => {}} />
-
-        <AppText variant="caption" color="textMuted">
-          Switch your phone between light and dark mode to compare.
-        </AppText>
-      </ScrollView>
-    </SafeAreaView>
+        <BrandMark size={104} />
+        <AppText variant="title">{brand.name}</AppText>
+      </Animated.View>
+    </View>
   );
 }
